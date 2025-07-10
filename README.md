@@ -1,5 +1,6 @@
-# Vue 3 + TypeScript + Vite
+# Lab for stress experimentations
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+More information at https://www.notion.so/wee-fin/SPIKE-AG-Grid-Test-de-charge-22c34c0e20c5806a926ef8f68145105a
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+
+![image](https://github.com/user-attachments/assets/02886049-7948-4cae-9a59-837f5a5be92a)
