@@ -24,17 +24,24 @@
       pagination
       :pagination-page-size="25"
       :pagination-page-size-selector="[25, 50]"
-      :get-row-id="({ data }) => data?.id"
+      :get-row-id="({ data }) => unpackEntity(data).id"
       :style="{
         width: '900px',
         height: '900px',
       }"
       :column-defs="[
-        { field: 'name' },
-        { field: 'country' },
-        { field: 'sector' },
+        { field: 'name', valueGetter: ({ data }) => unpackEntity(data).name },
+        {
+          field: 'country',
+          filter: true,
+          valueGetter: ({ data }) => unpackEntity(data).country,
+        },
+        {
+          field: 'sector',
+          valueGetter: ({ data }) => unpackEntity(data).sector,
+        },
       ]"
-      :row-data="entities"
+      :row-data="stringifiedEntities"
     >
     </AgGridVue>
   </div>
@@ -45,17 +52,26 @@ import { AgGridVue } from "ag-grid-vue3";
 
 import { useAppStorage } from "./composables/use-app-storage";
 import { onBeforeMount, ref } from "vue";
+import type { Entity } from "./types";
 
 const { fetchData } = useAppStorage();
 
-const entities = ref<any[]>([]);
 const isFetchingData = ref(false);
+const stringifiedEntities = ref<string[]>();
+
+const unpackEntity = (item: any) => JSON.parse(item) as Entity;
 
 onBeforeMount(async () => {
   isFetchingData.value = true;
   try {
-    await fetchData(entities);
+    console.time("Total time");
+    stringifiedEntities.value = await fetchData();
+
     console.log("Data transferred to AG Grid");
+
+    requestIdleCallback(() => {
+      console.timeEnd("Total time");
+    });
   } finally {
     isFetchingData.value = false;
   }
