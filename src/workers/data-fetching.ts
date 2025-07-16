@@ -3,7 +3,7 @@ import Dexie from "dexie";
 import { processStepsAsync } from "../utils";
 import { DATA_COUNT } from "./dataset-generation";
 
-const CHUNK_COUNT = 100;
+const CHUNK_COUNT = 25;
 
 const initWorker = new Worker(
   new URL("./dataset-generation.ts", import.meta.url),
@@ -61,9 +61,15 @@ self.onmessage = async ({ data }) => {
           resolve("done");
           return;
         }
-        itemsToInsert = itemsToInsert.concat(_event.data.chunk);
+
+        const parsedChunk = _event.data.chunk.map((item: unknown) =>
+          JSON.stringify(item)
+        );
+
+        itemsToInsert = itemsToInsert.concat(parsedChunk);
+
         self.postMessage({
-          chunk: _event.data.chunk,
+          chunk: parsedChunk,
           totalCount: _event.data.totalCount,
         });
       };

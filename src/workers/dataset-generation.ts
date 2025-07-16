@@ -5,7 +5,7 @@ import type { Entity, Indicator } from "../types";
 import { processStepsAsync } from "../utils";
 
 export const DATA_COUNT = 500_000;
-const CHUNK_COUNT = 100;
+const CHUNK_COUNT = 500;
 const BATCH_SIZE = DATA_COUNT / CHUNK_COUNT;
 
 export const FAKE_INDICATOR_GROUP: Indicator[] = Array.from(
@@ -47,7 +47,7 @@ self.onmessage = async () => {
   console.time("Dataset generation");
   await processStepsAsync(
     CHUNK_COUNT,
-    (stepIndex) => {
+    () => {
       self.postMessage({
         chunk: Array.from({ length: BATCH_SIZE }, generateFakeEntity),
         totalCount: DATA_COUNT,

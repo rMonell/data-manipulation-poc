@@ -1,27 +1,26 @@
 import { createSharedComposable } from "@vueuse/core";
 
-import type { Entity } from "dexie";
-import type { Ref } from "vue";
-
 const insertWorker = new Worker(
   new URL("../workers/data-fetching.ts", import.meta.url),
   { type: "module" }
 );
 
 export const useAppStorage = createSharedComposable(() => {
-  const fetchData = async (source: Ref<Entity[]>): Promise<Entity[]> => {
+  const fetchData = async (): Promise<string[]> => {
     const resourceUrl = "/entities";
+
+    const items: string[] = [];
 
     return new Promise((resolve) => {
       insertWorker.onmessage = async (event) => {
         if (
           event.data.type === "done" &&
-          source.value.length === event.data.totalCount
+          items.length === event.data.totalCount
         ) {
-          resolve(event.data);
+          resolve(items);
           return;
         }
-        source.value.push(...event.data.chunk);
+        items.push(...event.data.chunk);
       };
       insertWorker.postMessage({ resourceUrl });
     });
