@@ -1,6 +1,12 @@
-# Lab for stress experimentations
+# Lab for stress test experimentations around AG Grid
 
-More information at https://www.notion.so/wee-fin/SPIKE-AG-Grid-Test-de-charge-22c34c0e20c5806a926ef8f68145105a
+<img width="1044" height="1077" alt="image" src="https://github.com/user-attachments/assets/cdb9e478-d719-4ff5-b3d4-6a03b189c367" />
 
 
-![image](https://github.com/user-attachments/assets/02886049-7948-4cae-9a59-837f5a5be92a)
+## Generate dataset file
+
+Run the following command to generate a test dataset (default will be a 10 items dataset) :
+
+```shell
+$ pnpm run init-dataset --count=XXX
+```
