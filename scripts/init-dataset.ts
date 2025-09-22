@@ -1,4 +1,4 @@
-import { createWriteStream, writeFileSync } from "node:fs";
+import { createWriteStream, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { once } from "node:events";
@@ -12,11 +12,15 @@ const argv = yargs(hideBin(process.argv))
   .option("count", { type: "number", default: 10 })
   .parseSync();
 
+const TOTAL = argv.count;
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const TOTAL = argv.count;
-const filePath = resolve(__dirname, "../public/dataset.json");
+const dirPath = resolve(__dirname, "../public");
+const filePath = resolve(dirPath, "dataset.json");
+
+mkdirSync(dirPath, { recursive: true });
 
 async function initDataset() {
   const stream = createWriteStream(filePath, { encoding: "utf-8" });
