@@ -25,12 +25,11 @@ mkdirSync(dirPath, { recursive: true });
 async function initDataset() {
   const stream = createWriteStream(filePath, { encoding: "utf-8" });
 
-  // Progress bar
-  const bar = new cliProgress.SingleBar(
+  const progressBar = new cliProgress.SingleBar(
     { format: "Generating [{bar}] {percentage}% | {value}/{total}" },
     cliProgress.Presets.rect
   );
-  bar.start(TOTAL, 0);
+  progressBar.start(TOTAL, 0);
 
   async function writeChunk(chunk: string) {
     if (!stream.write(chunk)) {
@@ -39,6 +38,7 @@ async function initDataset() {
   }
 
   await writeChunk("[");
+
   for (let i = 0; i < TOTAL; i++) {
     const createdAt = faker.date.past();
     const entity: Entity = {
@@ -55,11 +55,13 @@ async function initDataset() {
 
     const json = JSON.stringify(entity);
     await writeChunk(i === 0 ? json : "," + json);
-    bar.increment();
+    progressBar.increment();
   }
+
   await writeChunk("]");
+
   stream.end();
-  bar.stop();
+  progressBar.stop();
 }
 
 initDataset();

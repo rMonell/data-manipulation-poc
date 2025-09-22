@@ -38,7 +38,11 @@
           height: '900px',
         }"
         :column-defs="[
-          { field: 'name', filter: true, cellDataType: 'text' },
+          {
+            field: 'name',
+            filter: 'agTextColumnFilter',
+            cellDataType: 'text',
+          },
           {
             field: 'country',
             filter: 'agSetColumnFilter',
@@ -51,7 +55,7 @@
           },
           {
             field: 'createdAt',
-            filter: true,
+            filter: 'agDateColumnFilter',
             cellDataType: 'date',
             valueGetter: ({ data }) => {
               return data ? new Date(data.createdAt) : undefined;
@@ -60,7 +64,7 @@
           { field: 'createdBy', filter: true, cellDataType: 'text' },
           {
             field: 'updatedAt',
-            filter: true,
+            filter: 'agDateColumnFilter',
             cellDataType: 'date',
             valueGetter: ({ data }) => {
               return data ? new Date(data.createdAt) : undefined;
