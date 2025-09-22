@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="h-screen w-screen flex justify-center items-center bg-slate-950 text-white"
+  >
     <svg
       v-if="isFetchingData"
       viewBox="0 0 800 800"
@@ -18,44 +20,90 @@
       />
     </svg>
 
-    <AgGridVue
-      v-else
-      ref="table"
-      pagination
-      :pagination-page-size="25"
-      :pagination-page-size-selector="[25, 50]"
-      :get-row-id="({ data }) => data?.id"
-      :style="{
-        width: '900px',
-        height: '900px',
-      }"
-      :column-defs="[
-        { field: 'name' },
-        { field: 'country' },
-        { field: 'sector' },
-      ]"
-      :row-data="entities"
-    >
-    </AgGridVue>
+    <div v-else>
+      <input
+        placeholder="Search"
+        class="mb-4 rounded-md bg-slate-700 p-2"
+        @input="(e: Event) => updateSearchText(e)"
+      />
+
+      <AgGridVue
+        ref="table"
+        pagination
+        :pagination-page-size="25"
+        :pagination-page-size-selector="[25, 50, 100, 500]"
+        :get-row-id="({ data }) => data?.id"
+        :style="{
+          width: '900px',
+          height: '900px',
+        }"
+        :column-defs="[
+          { field: 'name', filter: true, cellDataType: 'text' },
+          {
+            field: 'country',
+            filter: 'agSetColumnFilter',
+            cellDataType: 'text',
+          },
+          {
+            field: 'sector',
+            filter: 'agSetColumnFilter',
+            cellDataType: 'text',
+          },
+          {
+            field: 'createdAt',
+            filter: true,
+            cellDataType: 'date',
+            valueGetter: ({ data }) => {
+              return data ? new Date(data.createdAt) : undefined;
+            },
+          },
+          { field: 'createdBy', filter: true, cellDataType: 'text' },
+          {
+            field: 'updatedAt',
+            filter: true,
+            cellDataType: 'date',
+            valueGetter: ({ data }) => {
+              return data ? new Date(data.createdAt) : undefined;
+            },
+          },
+        ]"
+        :row-data="entities"
+      >
+      </AgGridVue>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { AgGridVue } from "ag-grid-vue3";
 
-import { useAppStorage } from "./composables/use-app-storage";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, useTemplateRef } from "vue";
+import { debounce } from "lodash-es";
+import type { Entity } from "./types";
 
-const { fetchData } = useAppStorage();
+const tableRef = useTemplateRef("table");
 
 const entities = ref<any[]>([]);
 const isFetchingData = ref(false);
 
+const updateSearchText = debounce((event: Event) => {
+  tableRef.value?.api?.setGridOption(
+    "quickFilterText",
+    (event.target as HTMLInputElement).value
+  );
+}, 400);
+
+const fetchData = async (): Promise<Entity[]> => {
+  const response = await fetch("/dataset.json");
+  const entities = await response.json();
+  return entities;
+};
+
 onBeforeMount(async () => {
   isFetchingData.value = true;
   try {
-    await fetchData(entities);
-    console.log("Data transferred to AG Grid");
+    entities.value = await fetchData();
+    console.log("Data transferred");
   } finally {
     isFetchingData.value = false;
   }
