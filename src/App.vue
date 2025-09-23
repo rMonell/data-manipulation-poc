@@ -26,7 +26,7 @@
         :column-defs="
           columns.map((column) => {
             const filterFromColumnType: Record<ColumnMetaData['type'], string> = {
-              'text': 'agDateColumnFilter',
+              'text': 'agTextColumnFilter',
               'set': 'agSetColumnFilter',
               'number': 'agNumberColumnFilter',
               'date': 'agDateColumnFilter',
