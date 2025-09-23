@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 /public/dataset.json
+/public/columns-metadata.json
 
 # Editor directories and files
 .vscode/*

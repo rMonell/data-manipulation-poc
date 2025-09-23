@@ -1,9 +1,10 @@
-export interface Entity {
+export interface TableItem {
   id: string;
-  name: string;
-  sector?: string;
-  country?: string;
-  createdAt: string;
-  updatedAt?: string;
-  createdBy: string;
+  [column: string]: string | number | Date | undefined;
+}
+
+export interface ColumnMetaData {
+  id: string;
+  label: string;
+  type: "text" | "set" | "number" | "date";
 }
