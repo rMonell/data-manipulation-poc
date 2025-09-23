@@ -10,3 +10,9 @@ Run the following command to generate a test dataset (default will be a 10 items
 ```shell
 $ pnpm run init-dataset --count=XXX
 ```
+
+You can also generate random columns count by using the `cols` param (default will be 5) :
+
+```shell
+$ pnpm run init-dataset --cols=XXX
+```
