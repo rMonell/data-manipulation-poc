@@ -1,6 +1,7 @@
 # Lab for stress test experimentations around AG Grid
 
-<img width="1044" height="1077" alt="image" src="https://github.com/user-attachments/assets/cdb9e478-d719-4ff5-b3d4-6a03b189c367" />
+<img width="1503" height="1046" alt="image" src="https://github.com/user-attachments/assets/db16594d-e72d-4142-9a4f-bb5aa55c77b3" />
+
 
 
 ## Generate dataset file
